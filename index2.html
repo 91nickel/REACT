@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Hello World</title>
+    <link rel="stylesheet" href="style2.css">
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="program"></div>
+
+<script type="text/babel">
+    const app = document.getElementById('program');
+
+    class Task extends React.Component {
+        constructor(data) {
+            super();
+            this.state = {
+                edit: false
+            };
+            this.children = data.children;
+            this.props = {
+                index: data.index
+            };
+        }
+
+        edit() {
+            console.log("Нажата кнопка редактировать");
+            this.setState({
+                edit: !this.state.edit
+            })
+        }
+
+        save() {
+            console.log("Нажата кнопка Save");
+            this.newText = this.refs.newText.value;
+            this.setState({
+                edit: !this.state.edit
+            })
+
+        }
+
+        remove() {
+            console.log("Нажата кнопка удалить");
+            this.props.deleteBlock(this.props.index);
+            console.log(this.props.index);
+        }
+
+        renderNorm() {
+            console.log(this.props);
+            return (
+                <div className="box">
+                    <div className="text">{this.children}</div>
+                    <button onClick={this.edit.bind(this)} className="btn light">Edit</button>
+                    <button onClick={this.remove.bind(this)} className="btn red">Delete</button>
+                </div>
+            );
+        }
+
+        renderEdit() {
+            return (
+                <div className="box">
+                    <label>
+                        <textarea ref="newText"
+                                  defaultValue={this.children}></textarea>
+                    </label>
+                    <button onClick={this.save.bind(this)} className="btn success">Save</button>
+                </div>
+            );
+        }
+
+        render() {
+            if (this.state.edit) {
+                return this.renderEdit();
+            } else {
+                return this.renderNorm();
+            }
+        }
+    }
+
+    class Field extends React.Component {
+        constructor() {
+            super();
+            this.state = {
+                tasks: [
+                    'Необходимо купить молоко',
+                    'Надо почистить зубы',
+                    'Необходимо просто отдохнуть',
+                ]
+            }
+        }
+
+        eachTask(el, i) {
+            return (
+                <Task key={i}
+                      index={i} update={this.updateText.bind(this)}
+                      deleteBlock={this.deleteBlock.bind(this)}>
+
+                    {el}
+
+                </Task>
+            );
+        }
+
+        deleteBlock(index) {
+            console.log(index);
+            const array = this.state.tasks;
+            array.splice(index, 1);
+            this.setState({
+                tasks: array
+            })
+        }
+
+        updateText(text, index) {
+            const array = this.state.tasks;
+            array[index] = text;
+            this.setState(
+                {
+                    tasks: array
+                }
+            )
+        }
+
+        render() {
+            return (
+                <div className="field">
+                    {this.state.tasks.map(this.eachTask.bind(this))}
+                </div>
+            )
+        }
+
+    }
+
+
+    ReactDOM.render(
+        <Field></Field>,
+        app
+    );
+
+</script>
+
+</body>
+</html>

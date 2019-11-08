@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Hello World</title>
+    <link rel="stylesheet" href="style2.css">
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="program"></div>
+
+<script type="text/babel">
+    const app = document.getElementById('program');
+
+    class Checkbox extends React.Component {
+        constructor() {
+            super();
+            this.state = {
+                checked: true
+            }
+        }
+
+        handleCheck() {
+            this.setState({
+                checked: !this.state.checked
+            });
+            console.log(this.state.checked);
+        }
+
+        render() {
+            let message;
+            if (this.state.checked) {
+                message = 'checked';
+            } else {
+                message = 'unchecked';
+            }
+            return (
+                <div>
+                    <label>
+                        <input type="checkbox" defaultChecked={this.state.checked}
+                               onChange={this.handleCheck.bind(this)}/>
+                    </label>
+                    <p>Чекбокс {message}</p>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(
+        <div className="field">
+            <Checkbox/>
+        </div>,
+        app
+    );
+
+
+    /*
+        class Task extends React.Component {
+            edit() {
+                console.log("Нажата кнопка редактировать");
+            }
+
+            remove() {
+                console.log("Нажата кнопка удалить");
+            }
+
+            render() {
+                return (
+                    <div className="box">
+                        <div className="text">{this.props.value}</div>
+                        <button onClick={this.edit} className="btn light">Edit</button>
+                        <button onClick={this.remove} className="btn red">Delete</button>
+                    </div>
+                );
+            }
+        }
+    */
+
+    /*
+        ReactDOM.render(
+            <div className="field">
+                <Task value="Task #1"/>
+                <Task value="Task #2"/>
+                <Task value="Task #3"/>
+            </div>,
+            app
+        );
+    */
+
+</script>
+
+</body>
+</html>
